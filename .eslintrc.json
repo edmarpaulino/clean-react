@@ -6,5 +6,6 @@
   "rules": {
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslit/strict-boolean-expressions": "off"
-  }
+  },
+  "ignorePatterns": ["jest*.ts"]
 }
