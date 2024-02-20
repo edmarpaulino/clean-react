@@ -3,7 +3,7 @@ import type { HttpResponse } from '@/data/protocols/http/http-response'
 import { HttpStatusCode } from '@/data/protocols/http/http-response'
 
 export class HttpPostClientSpy implements HttpPostClient {
-  private readonly defaultResponse: HttpResponse = { statusCode: HttpStatusCode.noContent }
+  private readonly defaultResponse: HttpResponse = { statusCode: HttpStatusCode.ok }
 
   public url?: string
   public body?: object
