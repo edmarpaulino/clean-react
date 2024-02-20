@@ -1,6 +1,5 @@
 import type { HttpPostClient, HttpPostParams } from '@/data/protocols/http/http-post-client'
-import type { HttpResponse } from '@/data/protocols/http/http-response'
-import { HttpStatusCode } from '@/data/protocols/http/http-response'
+import { HttpStatusCode, type HttpResponse } from '@/data/protocols/http'
 
 export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
   private readonly defaultResponse: HttpResponse<R> = { statusCode: HttpStatusCode.ok }
