@@ -1,12 +1,20 @@
 {
-  "extends": "standard-with-typescript",
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": ["standard-with-typescript", "plugin:react/recommended"],
+  "plugins": ["react"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
   "rules": {
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslit/strict-boolean-expressions": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   },
   "ignorePatterns": ["jest*.ts"]
 }
