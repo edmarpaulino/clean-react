@@ -1,19 +1,10 @@
 import type { Validation } from '@/presentation/protocols/validation'
+import { faker } from '@faker-js/faker'
 
-export class ValidationSpy implements Validation {
-  private readonly defaultErrorMessage: string | null = null
-
-  public errorMessage: string | null = this.defaultErrorMessage
-  public fieldName: string = ''
-  public fieldValue: string = ''
+export class ValidationStub implements Validation {
+  public readonly errorMessage: string = faker.word.words()
 
   validate(fieldName: string, fieldValue: string): string | null {
-    this.fieldName = fieldName
-    this.fieldValue = fieldValue
     return this.errorMessage
-  }
-
-  reset(): void {
-    this.errorMessage = this.defaultErrorMessage
   }
 }
