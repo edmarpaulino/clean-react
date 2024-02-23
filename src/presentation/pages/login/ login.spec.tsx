@@ -1,25 +1,7 @@
 import React from 'react'
 import { type RenderResult, render, cleanup, fireEvent } from '@testing-library/react'
 import Login from './login'
-import type { Validation } from '@/presentation/protocols/validation'
-
-class ValidationSpy implements Validation {
-  private readonly defaultErrorMessage: string | null = null
-
-  public errorMessage: string | null = this.defaultErrorMessage
-  public fieldName: string = ''
-  public fieldValue: string = ''
-
-  validate(fieldName: string, fieldValue: string): string | null {
-    this.fieldName = fieldName
-    this.fieldValue = fieldValue
-    return this.errorMessage
-  }
-
-  reset(): void {
-    this.errorMessage = this.defaultErrorMessage
-  }
-}
+import { ValidationSpy } from '@/presentation/test/mock-validation'
 
 type SutTypes = {
   sut: RenderResult
