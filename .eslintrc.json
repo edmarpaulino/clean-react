@@ -14,6 +14,7 @@
     "@typescript-eslit/strict-boolean-expressions": "off",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/space-before-function-paren": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
   },
