@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login validation={{} as any} />
+    element: <Login validation={{} as any} authentication={{} as any} />
   }
 ])
 
