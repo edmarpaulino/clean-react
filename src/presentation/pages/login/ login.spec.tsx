@@ -5,6 +5,7 @@ import Login from './login'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
 import { InvalidCredentialsError } from '@/domain/errors'
+import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom'
 
 type SutParams = {
   validationError: string
@@ -14,17 +15,26 @@ type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
+  router: any
 }
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError ?? null
-  const sut = render(<Login validation={validationStub} authentication={authenticationSpy} />)
+  const routes: RouteObject[] = [
+    {
+      path: '/login',
+      element: <Login validation={validationStub} authentication={authenticationSpy} />
+    }
+  ]
+  const router = createMemoryRouter(routes, { initialEntries: ['/login'], initialIndex: 0 })
+  const sut = render(<RouterProvider router={router} />)
   return {
     sut,
     validationStub,
-    authenticationSpy
+    authenticationSpy,
+    router
   }
 }
 
@@ -150,5 +160,12 @@ describe('Login Component', () => {
     simulateValidSubmit(sut)
     await waitFor(() => sut.getByTestId('form'))
     expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+  })
+
+  test('Should go to signup page', async () => {
+    const { sut, router } = makeSut()
+    const signup = sut.getByTestId('signup')
+    fireEvent.click(signup)
+    expect(router.state.location.pathname).toBe('/signup')
   })
 })
