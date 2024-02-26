@@ -3,12 +3,12 @@ import { mockAccountModel } from '@/domain/test'
 import type { Authentication, AuthenticationParams } from '@/domain/usecases'
 
 export class AuthenticationSpy implements Authentication {
-  private readonly defaultAccount: AccountModel = mockAccountModel()
-
+  public callsCount: number = 0
   public params?: AuthenticationParams
-  public account: AccountModel = this.defaultAccount
+  public account: AccountModel = mockAccountModel()
 
   async auth(params: AuthenticationParams): Promise<AccountModel> {
+    this.callsCount++
     this.params = params
     return await Promise.resolve(this.account)
   }
