@@ -1,15 +1,18 @@
-import { Login } from '@/presentation/pages'
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-const router = createBrowserRouter([
-  {
-    path: '/login',
-    element: <Login validation={{} as any} authentication={{} as any} />
-  }
-])
+type Props = {
+  makeLogin: React.FC // Change the type to React.ReactNode
+}
 
-const Router: React.FC = () => {
+const Router: React.FC<Props> = ({ makeLogin }) => {
+  const router = createBrowserRouter([
+    {
+      path: '/login',
+      Component: makeLogin
+    }
+  ])
+
   return <RouterProvider router={router} />
 }
 
