@@ -1,1 +1,1 @@
-export const makeApiUrl = (): string => 'http://localhost:5050/api/login'
+export const makeApiUrl = (path: string): string => `http://localhost:5050/api${path}`
