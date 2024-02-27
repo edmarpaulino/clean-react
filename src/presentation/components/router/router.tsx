@@ -2,7 +2,7 @@ import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 type Props = {
-  makeLogin: React.FC // Change the type to React.ReactNode
+  makeLogin: React.FC
 }
 
 const Router: React.FC<Props> = ({ makeLogin }) => {
