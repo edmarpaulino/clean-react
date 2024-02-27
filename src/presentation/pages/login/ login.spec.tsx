@@ -98,6 +98,13 @@ describe('Login Component', () => {
     testStatusForField(sut, 'password', validationError)
   })
 
+  test('Should disable input readOnly on focus', () => {
+    const { sut } = makeSut()
+    const input = sut.getByTestId('email') as HTMLInputElement
+    fireEvent.focus(input)
+    expect(input.readOnly).toBe(false)
+  })
+
   test('Should show email error if Validation fails', () => {
     const validationError = faker.word.words()
     const { sut } = makeSut({ validationError })
