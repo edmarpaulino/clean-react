@@ -1,0 +1,15 @@
+import type { HttpPostClient } from '@/data/protocols/http'
+import type { AccountModel } from '@/domain/models'
+import type { AddAccount, AddAccountParams } from '@/domain/usecases'
+
+export class RemoteAddAccount implements AddAccount {
+  constructor(
+    private readonly url: string,
+    private readonly httpPostClient: HttpPostClient<AddAccountParams, AccountModel>
+  ) {}
+
+  async add(params: AddAccountParams): Promise<AccountModel> {
+    await this.httpPostClient.post({ url: this.url })
+    return null as any
+  }
+}
