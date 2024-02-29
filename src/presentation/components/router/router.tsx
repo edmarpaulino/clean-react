@@ -14,7 +14,7 @@ const Router: React.FC<Props> = ({ makeLogin }) => {
     },
     {
       path: '/signup',
-      element: <SignUp />
+      element: <SignUp validation={{} as any} />
     }
   ])
 
