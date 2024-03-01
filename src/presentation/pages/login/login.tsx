@@ -63,7 +63,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
           <Input type="password" name="password" placeholder="Digite sua senha" />
           <button
             data-testid="submit"
-            disabled={state.emailError || state.passWordError}
+            disabled={state.emailError || state.passwordError}
             className={Styles.submit}
             type="submit"
           >
