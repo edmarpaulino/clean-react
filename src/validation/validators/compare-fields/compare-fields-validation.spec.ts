@@ -12,7 +12,7 @@ describe('CompareFieldValidation', () => {
     const fieldToCompare = faker.database.column()
     const sut = makeSut(field, fieldToCompare)
     const error = sut.validate({ [field]: faker.word.sample(), [fieldToCompare]: faker.word.sample() })
-    expect(error).toEqual(new InvalidFieldError(sut.field))
+    expect(error).toEqual(new InvalidFieldError())
   })
 
   test('Should return falsy if compare is valid', () => {
