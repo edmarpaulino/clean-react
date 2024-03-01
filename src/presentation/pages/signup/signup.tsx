@@ -12,11 +12,11 @@ const SignUp: React.FC<Props> = ({ validation }: Props) => {
   const [state, setState] = useState<any>({
     isLoading: false,
     name: '',
-    nameError: '',
+    nameError: null,
     emailError: 'Campo obrigatório',
     passwordError: 'Campo obrigatório',
     passwordConfirmationError: 'Campo obrigatório',
-    mainError: ''
+    mainError: null
   })
 
   useEffect(() => {
