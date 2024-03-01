@@ -184,4 +184,11 @@ describe('SignUp Component', () => {
     FormHelper.testElementTextContent(sut, 'main-error', error.message)
     FormHelper.testChildCount(sut, 'error-wrap', 1)
   })
+
+  test('Should go to login page', async () => {
+    const { sut, router } = makeSut()
+    const loginLink = sut.getByTestId('login-link')
+    fireEvent.click(loginLink)
+    expect(router.state.location.pathname).toBe('/login')
+  })
 })
