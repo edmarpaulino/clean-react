@@ -131,10 +131,18 @@ describe('SignUp Component', () => {
     expect(addAccountSpy.params).toEqual({ name, email, password, passwordConfirmation: password })
   })
 
-  test('Should call Authentication only once', async () => {
+  test('Should call AddAccount only once', async () => {
     const { sut, addAccountSpy } = makeSut()
     void simulateValidSubmit(sut)
     void simulateValidSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(1)
+  })
+
+  test('Should not call AddAccount if form is invalid', () => {
+    const validationError = faker.word.words()
+    const { sut, addAccountSpy } = makeSut({ validationError })
+    FormHelper.populateField(sut, 'email')
+    fireEvent.submit(sut.getByTestId('form'))
+    expect(addAccountSpy.callsCount).toBe(0)
   })
 })
