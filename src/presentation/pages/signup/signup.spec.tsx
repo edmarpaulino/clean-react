@@ -1,9 +1,10 @@
 import React from 'react'
 import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing-library/react'
 import SignUp from './signup'
-import { AddAccountSpy, FormHelper, ValidationStub } from '@/presentation/test'
+import { AddAccountSpy, FormHelper, SaveAccessTokenMock, ValidationStub } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
 import { EmailInUseError } from '@/domain/errors'
+import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom'
 
 type SutParams = {
   validationError: string
@@ -13,17 +14,29 @@ type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
+  router: any
 }
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError ?? null
   const addAccountSpy = new AddAccountSpy()
-  const sut = render(<SignUp validation={validationStub} addAccount={addAccountSpy} />)
+  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const routes: RouteObject[] = [
+    {
+      path: '/signup',
+      element: <SignUp validation={validationStub} addAccount={addAccountSpy} saveAccessToken={saveAccessTokenMock} />
+    }
+  ]
+  const router = createMemoryRouter(routes, { initialEntries: ['/signup'], initialIndex: 0 })
+  const sut = render(<RouterProvider router={router} />)
   return {
     sut,
     validationStub,
-    addAccountSpy
+    addAccountSpy,
+    saveAccessTokenMock,
+    router
   }
 }
 
@@ -154,5 +167,12 @@ describe('SignUp Component', () => {
     await simulateValidSubmit(sut)
     FormHelper.testElementTextContent(sut, 'main-error', error.message)
     FormHelper.testChildCount(sut, 'error-wrap', 1)
+  })
+
+  test('Should call SaveAccessToken on success', async () => {
+    const { sut, addAccountSpy, router, saveAccessTokenMock } = makeSut()
+    await simulateValidSubmit(sut)
+    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(router.state.location.pathname).toBe('/')
   })
 })
