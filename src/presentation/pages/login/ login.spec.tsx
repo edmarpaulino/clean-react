@@ -42,17 +42,16 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-const simulateValidSubmit = async (sut: RenderResult, email?: string, password?: string): Promise<void> => {
+const simulateValidSubmit = async (
+  sut: RenderResult,
+  email: string = faker.internet.email(),
+  password: string = faker.internet.password()
+): Promise<void> => {
   FormHelper.populateField(sut, 'email', email)
   FormHelper.populateField(sut, 'password', password)
   const form = sut.getByTestId('form')
   fireEvent.submit(form)
   await waitFor(() => form)
-}
-
-const testElementExists = (sut: RenderResult, testId: string): void => {
-  const element = sut.getByTestId(testId)
-  expect(element).toBeTruthy()
 }
 
 const testElementTextContent = (sut: RenderResult, testId: string, textContent: string): void => {
@@ -108,7 +107,7 @@ describe('Login Component', () => {
   test('Should show spinner on submit', async () => {
     const { sut } = makeSut()
     await simulateValidSubmit(sut)
-    testElementExists(sut, 'spinner')
+    FormHelper.testElementExists(sut, 'spinner')
   })
 
   test('Should call Authentication with correct values', async () => {
