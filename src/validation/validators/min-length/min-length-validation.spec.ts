@@ -2,20 +2,27 @@ import { InvalidFieldError } from '@/validation/errors'
 import { MinLengthValidation } from './min-length-validation'
 import { faker } from '@faker-js/faker'
 
-const field: string = faker.database.column()
 const minLength: number = 5
-const makeSut = (): MinLengthValidation => new MinLengthValidation(field, minLength)
+const makeSut = (field: string): MinLengthValidation => new MinLengthValidation(field, minLength)
 
 describe('MinLengthValidation', () => {
   test('Should return error if value is invalid', () => {
-    const sut = makeSut()
-    const error = sut.validate(faker.word.sample({ length: 3 }))
+    const field: string = faker.database.column()
+    const sut = makeSut(field)
+    const error = sut.validate({ [field]: faker.word.sample({ length: 3 }) })
     expect(error).toEqual(new InvalidFieldError(field))
   })
 
   test('Should return falsy if value is valid', () => {
-    const sut = makeSut()
-    const error = sut.validate(faker.word.sample({ length: minLength }))
+    const field: string = faker.database.column()
+    const sut = makeSut(field)
+    const error = sut.validate({ [field]: faker.word.sample({ length: minLength }) })
+    expect(error).toBeFalsy()
+  })
+
+  test('Should return falsy if field does not exists in schema', () => {
+    const sut = makeSut(faker.database.column())
+    const error = sut.validate({ [faker.database.column()]: faker.word.sample({ length: minLength }) })
     expect(error).toBeFalsy()
   })
 })
