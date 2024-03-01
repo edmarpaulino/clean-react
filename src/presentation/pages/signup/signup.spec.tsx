@@ -27,14 +27,14 @@ describe('SignUp Component', () => {
   afterEach(cleanup)
 
   test('Should start with initial state', () => {
-    const validationError = 'Campo obrigatório'
+    const validationError = faker.word.words()
     const { sut } = makeSut({ validationError })
     FormHelper.testChildCount(sut, 'error-wrap', 0)
     FormHelper.testButtonIsDisabled(sut, 'submit', true)
     FormHelper.testStatusForField(sut, 'name', validationError)
-    FormHelper.testStatusForField(sut, 'email', validationError)
-    FormHelper.testStatusForField(sut, 'password', validationError)
-    FormHelper.testStatusForField(sut, 'passwordConfirmation', validationError)
+    FormHelper.testStatusForField(sut, 'email', 'Campo obrigatório')
+    FormHelper.testStatusForField(sut, 'password', 'Campo obrigatório')
+    FormHelper.testStatusForField(sut, 'passwordConfirmation', 'Campo obrigatório')
   })
 
   test('Should show name error if Validation fails', () => {
