@@ -17,5 +17,5 @@
     "isolatedModules": false
   },
   "include": ["src"],
-  "exclude": []
+  "exclude": ["cypress.config.ts", "./src/main/test/cypress", "node_modules"]
 }
