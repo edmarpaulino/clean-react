@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["cypress"]
   },
-  "include": ["../../../../node_modules/cypress", "./**/*.ts"]
+  "include": [
+    "../../../../node_modules/cypress",
+    "./**/*.ts",
+    "../../../../node_modules/@faker-js"
+  ]
 }

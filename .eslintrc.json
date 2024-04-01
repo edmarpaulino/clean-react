@@ -26,7 +26,8 @@
     "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "cypress/unsafe-to-chain-command": "off"
   },
   "ignorePatterns": ["jest*.ts"]
 }
