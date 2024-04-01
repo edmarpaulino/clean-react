@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker'
 
+const baseUrl: string = Cypress.config().baseUrl
+
 describe('Login', () => {
   beforeEach(() => {
     cy.visit('login')
@@ -40,11 +42,24 @@ describe('Login', () => {
       .should('contain.text', '🟢')
     cy.getByTestId('password')
       .focus()
-      .type(faker.word.sample({ length: 10 }))
+      .type(faker.internet.password({ length: 10 }))
     cy.getByTestId('password-status')
       .should('have.attr', 'title', 'Tudo certo!')
       .should('contain.text', '🟢')
     cy.getByTestId('submit').should('not.have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
+  })
+
+  it('Should present error if invalid credentials are provided', () => {
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    cy.getByTestId('password')
+      .focus()
+      .type(faker.internet.password({ length: 10 }))
+    cy.getByTestId('submit').click()
+    cy.getByTestId('spinner').should('exist')
+    cy.getByTestId('main-error').should('not.exist')
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('contain.text', 'Credenciais inválidas')
+    cy.url().should('eq', `${baseUrl}/login`)
   })
 })
