@@ -137,4 +137,20 @@ describe('Login', () => {
     )
     cy.url().should('eq', `${baseUrl}/`)
   })
+
+  it('Should prevent multiple submits', () => {
+    cy.intercept('POST', /login/, {
+      delay: 500,
+      statusCode: 200,
+      body: {
+        accessToken: faker.string.uuid()
+      }
+    }).as('request')
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    cy.getByTestId('password')
+      .focus()
+      .type(faker.internet.password({ length: 10 }))
+    cy.getByTestId('submit').click().click()
+    cy.get('@request.all').should('have.length', 1)
+  })
 })
