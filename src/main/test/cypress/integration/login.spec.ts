@@ -105,7 +105,7 @@ describe('Login', () => {
     cy.getByTestId('password')
       .focus()
       .type(faker.internet.password({ length: 10 }))
-    cy.getByTestId('submit').click()
+      .type('{enter}')
     cy.getByTestId('spinner').should('exist')
     cy.getByTestId('main-error').should('not.exist')
     cy.getByTestId('spinner').should('not.exist')
