@@ -12,3 +12,7 @@ export const mockUnexpectedError = (): void => {
 export const mockInvalidData = (): void => {
   Helper.mockOk(/signup/, 'POST', { invalidProperty: faker.string.uuid() })
 }
+
+export const mockOk = (): void => {
+  Helper.mockOk(/signup/, 'POST', { accessToken: faker.string.uuid() })
+}
