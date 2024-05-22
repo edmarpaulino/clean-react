@@ -13,6 +13,16 @@ export const mockInvalidCredentialsError = (url: RegExp): void => {
   }).as('request')
 }
 
+export const mockEmailInUseError = (url: RegExp): void => {
+  cy.intercept('POST', url, {
+    delay: REQUEST_DELAY_MS,
+    statusCode: 403,
+    body: {
+      error: faker.word.words()
+    }
+  }).as('request')
+}
+
 export const mockUnexpectedError = (url: RegExp, method: Method): void => {
   const statusCodes = [400, 404, 500]
   const randomStatusCodesIndex = Math.floor(Math.random() * statusCodes.length)
