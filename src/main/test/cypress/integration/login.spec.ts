@@ -2,11 +2,15 @@ import { faker } from '@faker-js/faker'
 import * as FormHelper from '../support/form-helper'
 import * as Http from '../support/login-mocks'
 
-const simulateValidSubmit = (): void => {
+const populateFields = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email())
   cy.getByTestId('password')
     .focus()
     .type(faker.internet.password({ length: 10 }))
+}
+
+const simulateValidSubmit = (): void => {
+  populateFields()
   cy.getByTestId('submit').click()
 }
 
@@ -77,10 +81,7 @@ describe('Login', () => {
 
   it('Should prevent multiple submits', () => {
     Http.mockOk()
-    cy.getByTestId('email').focus().type(faker.internet.email())
-    cy.getByTestId('password')
-      .focus()
-      .type(faker.internet.password({ length: 10 }))
+    populateFields()
     cy.getByTestId('submit').click().click()
     FormHelper.testHttpCallsCount(1)
   })
