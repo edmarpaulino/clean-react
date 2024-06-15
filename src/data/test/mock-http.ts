@@ -13,6 +13,10 @@ export const mockPostRequest = (): HttpPostParams => ({
   body: faker.internet.exampleEmail()
 })
 
+export const mockGetRequest = (): HttpGetParams => ({
+  url: faker.internet.url()
+})
+
 export class HttpPostClientSpy<R> implements HttpPostClient<R> {
   private readonly defaultResponse: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok
