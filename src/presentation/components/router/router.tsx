@@ -1,3 +1,4 @@
+import { SurveyList } from '@/presentation/pages'
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
@@ -15,6 +16,10 @@ const Router: React.FC<Factory> = (factory: Factory) => {
     {
       path: '/signup',
       Component: factory.makeSignUp
+    },
+    {
+      path: '/',
+      Component: SurveyList
     }
   ])
 
