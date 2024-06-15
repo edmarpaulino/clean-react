@@ -25,7 +25,7 @@ export class HttpPostClientSpy<R> implements HttpPostClient<R> {
   async post(params: HttpPostParams): Promise<HttpResponse<R>> {
     this.url = params.url
     this.body = params.body
-    return await Promise.resolve(this.response)
+    return this.response
   }
 
   reset(): void {
@@ -33,10 +33,20 @@ export class HttpPostClientSpy<R> implements HttpPostClient<R> {
   }
 }
 
-export class HttpGetClientSpy implements HttpGetClient {
-  url: string = ''
+export class HttpGetClientSpy<R> implements HttpGetClient<R> {
+  private readonly defaultResponse: HttpResponse<R> = {
+    statusCode: HttpStatusCode.ok
+  }
 
-  async get(params: HttpGetParams): Promise<void> {
+  public url: string = ''
+  public response: HttpResponse<R> = this.defaultResponse
+
+  async get(params: HttpGetParams): Promise<HttpResponse<R>> {
     this.url = params.url
+    return this.response
+  }
+
+  reset(): void {
+    this.response = this.defaultResponse
   }
 }
