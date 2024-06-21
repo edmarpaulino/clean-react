@@ -4,6 +4,7 @@ import type { AccountModel } from '@/domain/models'
 
 type Context = {
   setCurrentAccount?: (account: AccountModel) => void
+  getCurrentAccount?: () => AccountModel | undefined
 }
 
 export default createContext<Context>({})
