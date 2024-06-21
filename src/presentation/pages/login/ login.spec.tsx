@@ -15,7 +15,7 @@ type SutTypes = {
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
   saveAccessTokenMock: SaveAccessTokenMock
-  router: any
+  router: React.ComponentProps<typeof RouterProvider>['router']
 }
 
 const makeSut = (params?: SutParams): SutTypes => {
