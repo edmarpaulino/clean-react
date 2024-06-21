@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Styles from './login-styles.scss'
-import {
-  LoginHeader,
-  Footer,
-  Input,
-  FormStatus,
-  SubmitButton
-} from '@/presentation/components'
+import { LoginHeader, Footer, Input, FormStatus, SubmitButton } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import type { Validation } from '@/presentation/protocols/validation'
-import type { Authentication, SaveAccessToken } from '@/domain/usecases'
+import type { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
 import { Link, useNavigate } from 'react-router-dom'
 
 type Props = {
   validation: Validation
   authentication: Authentication
-  saveAccessToken: SaveAccessToken
+  updateCurrentAccount: UpdateCurrentAccount
 }
 
-const Login: React.FC<Props> = ({
-  validation,
-  authentication,
-  saveAccessToken
-}: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccount }: Props) => {
   const navigate = useNavigate()
   const [state, setState] = useState<any>({
     isLoading: false,
@@ -48,9 +38,7 @@ const Login: React.FC<Props> = ({
     })
   }, [state.email, state.password])
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
       if (state.isLoading || state.isFormInvalid) {
@@ -64,7 +52,7 @@ const Login: React.FC<Props> = ({
         email: state.email,
         password: state.password
       })
-      await saveAccessToken.save(account.accessToken)
+      await updateCurrentAccount.save(account)
       navigate('/')
     } catch (error: any) {
       setState({
@@ -79,25 +67,12 @@ const Login: React.FC<Props> = ({
     <div className={Styles.loginWrap}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form
-          data-testid="form"
-          className={Styles.form}
-          onSubmit={handleSubmit}
-        >
+        <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
-          <Input
-            type="password"
-            name="password"
-            placeholder="Digite sua senha"
-          />
+          <Input type="password" name="password" placeholder="Digite sua senha" />
           <SubmitButton text="Entrar" />
-          <Link
-            data-testid="signup-link"
-            to="/signup"
-            replace
-            className={Styles.link}
-          >
+          <Link data-testid="signup-link" to="/signup" replace className={Styles.link}>
             Criar conta
           </Link>
           <FormStatus />

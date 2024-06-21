@@ -18,5 +18,6 @@ export const mockAddAccountParams = (): AddAccountParams => {
 }
 
 export const mockAccountModel = (): AccountModel => ({
-  accessToken: faker.string.uuid()
+  accessToken: faker.string.uuid(),
+  name: faker.person.fullName()
 })
