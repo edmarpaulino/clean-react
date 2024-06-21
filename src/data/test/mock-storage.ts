@@ -4,7 +4,7 @@ export class SetStorageMock implements SetStorage {
   public key?: string
   public value?: string
 
-  async set(key: string, value: string): Promise<void> {
+  set(key: string, value: string): void {
     this.key = key
     this.value = value
   }
