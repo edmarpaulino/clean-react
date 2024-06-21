@@ -1,13 +1,16 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { Router } from '@/presentation/components'
+
+import Router from '@/main/routes/router'
+
 import '@/presentation/styles/global.scss'
-import { makeLogin } from './factories/pages/login/login-factory'
-import { makeSignUp } from './factories/pages/signup/signup-factory'
 
 const domNode = document.getElementById('main')
-const root = createRoot(domNode!)
 
-root.render(<Router makeLogin={makeLogin} makeSignUp={makeSignUp} />)
+if (!domNode) {
+  throw new Error('Falha ao gerar a página')
+}
+
+const root = createRoot(domNode)
+
+root.render(<Router />)
