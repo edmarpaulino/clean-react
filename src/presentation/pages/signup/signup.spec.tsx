@@ -62,8 +62,8 @@ describe('SignUp Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.word.words()
     makeSut({ validationError })
-    FormHelper.testChildCount('error-wrap', 0)
-    FormHelper.testButtonIsDisabled('submit', true)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
+    expect(screen.getByTestId<HTMLButtonElement>('submit')).toBeDisabled()
     FormHelper.testStatusForField('name', validationError)
     FormHelper.testStatusForField('email', validationError)
     FormHelper.testStatusForField('password', validationError)
@@ -128,14 +128,14 @@ describe('SignUp Component', () => {
     FormHelper.populateField('email')
     FormHelper.populateField('password')
     FormHelper.populateField('passwordConfirmation')
-    FormHelper.testButtonIsDisabled('submit', false)
+    expect(screen.getByTestId<HTMLButtonElement>('submit')).toBeEnabled()
   })
 
   // FIXME: The test stop working after use context api arround Router
   // test('Should show spinner on submit', async () => {
   //   makeSut()
   //   await simulateValidSubmit()
-  //   FormHelper.testElementExists('spinner')
+  //   expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   // })
 
   test('Should call AddAccount with correct values', async () => {
@@ -167,8 +167,8 @@ describe('SignUp Component', () => {
     const error = new EmailInUseError()
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
     await simulateValidSubmit()
-    FormHelper.testElementTextContent('main-error', error.message)
-    FormHelper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
   test('Should call SaveAccessToken on success', async () => {
