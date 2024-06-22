@@ -5,6 +5,7 @@ import { makeSignUp } from '@/main/factories/pages/signup/signup-factory'
 import { ApiContext } from '@/presentation/contexts'
 import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adpters/current-account-adapter'
 import { SurveyList } from '@/presentation/pages'
+import { PrivateRoute } from '@/presentation/components'
 
 const Router: React.FC = () => {
   const value = useMemo(
@@ -26,7 +27,11 @@ const Router: React.FC = () => {
     },
     {
       path: '/',
-      Component: SurveyList
+      element: (
+        <PrivateRoute>
+          <SurveyList />
+        </PrivateRoute>
+      )
     }
   ])
 
