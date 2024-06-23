@@ -131,12 +131,18 @@ describe('SignUp Component', () => {
     expect(screen.getByTestId<HTMLButtonElement>('submit')).toBeEnabled()
   })
 
-  // FIXME: The test stop working after use context api arround Router
-  // test('Should show spinner on submit', async () => {
-  //   makeSut()
-  //   await simulateValidSubmit()
-  //   expect(screen.queryByTestId('spinner')).toBeInTheDocument()
-  // })
+  test('Should show spinner on submit', async () => {
+    makeSut()
+    const password = faker.internet.password()
+    FormHelper.populateField('name', faker.person.fullName())
+    FormHelper.populateField('email', faker.internet.email())
+    FormHelper.populateField('password', password)
+    FormHelper.populateField('passwordConfirmation', password)
+    const form = screen.getByTestId('form')
+    fireEvent.submit(form)
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
+    await waitFor(() => form)
+  })
 
   test('Should call AddAccount with correct values', async () => {
     const { addAccountSpy } = makeSut()

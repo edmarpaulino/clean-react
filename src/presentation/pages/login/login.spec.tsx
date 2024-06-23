@@ -100,8 +100,12 @@ describe('Login Component', () => {
 
   test('Should show spinner on submit', async () => {
     makeSut()
-    await simulateValidSubmit()
+    FormHelper.populateField('email', faker.internet.email())
+    FormHelper.populateField('password', faker.internet.password())
+    const form = screen.getByTestId('form')
+    fireEvent.submit(form)
     expect(screen.queryByTestId('spinner')).toBeInTheDocument()
+    await waitFor(() => form)
   })
 
   test('Should call Authentication with correct values', async () => {
