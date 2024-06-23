@@ -4,11 +4,7 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "standard-with-typescript",
-    "plugin:react/recommended",
-    "plugin:cypress/recommended"
-  ],
+  "extends": ["standard-with-typescript", "plugin:react/recommended", "plugin:cypress/recommended"],
   "env": {
     "cypress/globals": true
   },
@@ -25,6 +21,7 @@
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-floating-promises": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/prop-types": "off",
