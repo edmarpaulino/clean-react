@@ -1,9 +1,29 @@
 import React from 'react'
 import { screen, render } from '@testing-library/react'
 import { SurveyList } from '@/presentation/pages'
+import type { LoadSurveyList } from '@/domain/usecases/load-survey-list'
+import type { SurveyModel } from '@/domain/models'
 
-const makeSut = (): void => {
-  render(<SurveyList />)
+class LoadSurveyListSpy implements LoadSurveyList {
+  public callsCount = 0
+
+  async loadAll(): Promise<SurveyModel[]> {
+    this.callsCount++
+
+    return []
+  }
+}
+
+type SutTypes = {
+  loadSurveyListSpy: LoadSurveyListSpy
+}
+
+const makeSut = (): SutTypes => {
+  const loadSurveyListSpy = new LoadSurveyListSpy()
+  render(<SurveyList loadSurveyList={loadSurveyListSpy} />)
+  return {
+    loadSurveyListSpy
+  }
 }
 
 describe('SurveyList Component', () => {
@@ -11,5 +31,10 @@ describe('SurveyList Component', () => {
     makeSut()
     const surveyList = screen.getByTestId('survey-list')
     expect(surveyList.querySelectorAll('li:empty')).toHaveLength(4)
+  })
+
+  test('Should call LoadSurveyList', () => {
+    const { loadSurveyListSpy } = makeSut()
+    expect(loadSurveyListSpy.callsCount).toBe(1)
   })
 })
