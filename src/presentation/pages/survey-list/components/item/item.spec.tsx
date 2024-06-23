@@ -8,7 +8,7 @@ const makeSut = (survey = mockSurveyModel()): void => {
   render(<SurveyItem survey={survey} />)
 }
 
-describe('SurveyItem Component', () => {
+describe('Item Component', () => {
   test('Should render with correct values', () => {
     const survey = { ...mockSurveyModel(), didAnswer: true, date: new Date('2024-06-23T00:00:00') }
     makeSut(survey)
