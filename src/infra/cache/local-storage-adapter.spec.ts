@@ -28,4 +28,12 @@ describe('LocalStorageAdapter', () => {
     expect(obj).toEqual(value)
     expect(getItemSpy).toHaveBeenCalledWith(key)
   })
+
+  test('Should return null on localStorage.getItem failure', () => {
+    const sut = makeSut()
+    const key = faker.database.column()
+    jest.spyOn(localStorage, 'getItem').mockReturnValueOnce(null)
+    const obj = sut.get(key)
+    expect(obj).toEqual(null)
+  })
 })
