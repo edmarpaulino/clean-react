@@ -49,8 +49,4 @@ export class HttpGetClientSpy<R> implements HttpGetClient<R> {
     this.url = params.url
     return this.response
   }
-
-  reset(): void {
-    this.response = this.defaultResponse
-  }
 }
