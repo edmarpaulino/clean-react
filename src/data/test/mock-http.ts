@@ -18,7 +18,7 @@ export const mockGetRequest = (): HttpGetParams => ({
   headers: [faker.word.sample()]
 })
 
-export class HttpPostClientSpy<R> implements HttpPostClient<R> {
+export class HttpPostClientSpy<R = any> implements HttpPostClient<R> {
   private readonly defaultResponse: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok
   }
@@ -38,16 +38,18 @@ export class HttpPostClientSpy<R> implements HttpPostClient<R> {
   }
 }
 
-export class HttpGetClientSpy<R> implements HttpGetClient<R> {
+export class HttpGetClientSpy<R = any> implements HttpGetClient<R> {
   private readonly defaultResponse: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok
   }
 
   public url: string = ''
+  public headers?: any
   public response: HttpResponse<R> = this.defaultResponse
 
   async get(params: HttpGetParams): Promise<HttpResponse<R>> {
     this.url = params.url
+    this.headers = params.headers
     return this.response
   }
 }
