@@ -1,7 +1,7 @@
 import React from 'react'
 import { screen, render, waitFor, fireEvent } from '@testing-library/react'
 import { SurveyList } from '@/presentation/pages'
-import { LoadSurveyListSpy } from '@/domain/test'
+import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
 import { UnexpectedError } from '@/domain/errors'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
 import { ApiContext } from '@/presentation/contexts'
@@ -19,7 +19,7 @@ const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
+    <ApiContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: () => mockAccountModel() }}>
       <RouterProvider router={router} />
     </ApiContext.Provider>
   )
