@@ -1,5 +1,5 @@
 import { HttpPostClientSpy } from '@/data/test'
-import { RemoteAddAccount } from './remote-add-account'
+import { RemoteAddAccount } from '@/data/usecases'
 import { faker } from '@faker-js/faker'
 import { mockAddAccountModel, mockAddAccountParams } from '@/domain/test'
 import { HttpStatusCode } from '@/data/protocols/http'
