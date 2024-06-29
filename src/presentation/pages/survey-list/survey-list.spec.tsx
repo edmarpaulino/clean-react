@@ -1,21 +1,8 @@
 import React from 'react'
 import { screen, render, waitFor, fireEvent } from '@testing-library/react'
 import { SurveyList } from '@/presentation/pages'
-import type { LoadSurveyList } from '@/domain/usecases/load-survey-list'
-import type { SurveyModel } from '@/domain/models'
-import { mockSurveyList } from '@/domain/test'
+import { LoadSurveyListSpy } from '@/domain/test'
 import { UnexpectedError } from '@/domain/errors'
-
-class LoadSurveyListSpy implements LoadSurveyList {
-  public callsCount = 0
-  public surveys = mockSurveyList()
-
-  async loadAll(): Promise<SurveyModel[]> {
-    this.callsCount++
-
-    return this.surveys
-  }
-}
 
 type SutTypes = {
   loadSurveyListSpy: LoadSurveyListSpy

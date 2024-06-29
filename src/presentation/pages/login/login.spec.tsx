@@ -1,12 +1,13 @@
 import React from 'react'
 import { screen, render, fireEvent, waitFor } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
-import { AuthenticationSpy, ValidationStub, FormHelper } from '@/presentation/test'
+import { ValidationStub, FormHelper } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom'
 import ApiContext from '@/presentation/contexts/api/api-context'
-import type { AccountModel } from '@/domain/models'
+import type { Authentication } from '@/domain/usecases'
+import { AuthenticationSpy } from '@/domain/test'
 
 type SutParams = {
   validationError: string
@@ -15,7 +16,7 @@ type SutParams = {
 type SutTypes = {
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
-  setCurrentAccountMock: (account: AccountModel) => void
+  setCurrentAccountMock: (account: Authentication.Model) => void
   router: React.ComponentProps<typeof RouterProvider>['router']
 }
 
