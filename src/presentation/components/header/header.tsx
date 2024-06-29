@@ -8,8 +8,8 @@ const Header: React.FC = () => {
   const logout = useLogout()
   const { getCurrentAccount } = useContext(ApiContext)
 
-  const handleLogout = (event: React.MouseEvent<HTMLAnchorElement> | undefined): void => {
-    event?.preventDefault()
+  const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>): void => {
+    event.preventDefault()
     logout()
   }
 
