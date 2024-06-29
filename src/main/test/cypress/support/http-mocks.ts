@@ -3,7 +3,7 @@ import type { Method } from 'cypress/types/net-stubbing'
 
 const REQUEST_DELAY_MS = 100
 
-export const mockInvalidCredentialsError = (url: RegExp): void => {
+export const mockUnauthorizedError = (url: RegExp): void => {
   cy.intercept('POST', url, {
     delay: REQUEST_DELAY_MS,
     statusCode: 401,
@@ -13,8 +13,8 @@ export const mockInvalidCredentialsError = (url: RegExp): void => {
   }).as('request')
 }
 
-export const mockEmailInUseError = (url: RegExp): void => {
-  cy.intercept('POST', url, {
+export const mockForbiddenError = (url: RegExp, method: Method): void => {
+  cy.intercept(method, url, {
     delay: REQUEST_DELAY_MS,
     statusCode: 403,
     body: {
@@ -23,7 +23,7 @@ export const mockEmailInUseError = (url: RegExp): void => {
   }).as('request')
 }
 
-export const mockUnexpectedError = (url: RegExp, method: Method): void => {
+export const mockServerError = (url: RegExp, method: Method): void => {
   const statusCodes = [400, 404, 500]
   const randomStatusCodesIndex = Math.floor(Math.random() * statusCodes.length)
   const statusCode = statusCodes[randomStatusCodesIndex]
