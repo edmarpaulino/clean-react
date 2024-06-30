@@ -32,18 +32,11 @@ module.exports = merge(common, {
       }
     ]
   },
-  devServer: {
-    devMiddleware: {
-      writeToDisk: true
-    },
-    static: {
-      directory: './public'
-    },
-    historyApiFallback: true
-  },
   externals: {
     react: 'React',
-    'react-dom': 'ReactDOM'
+    axios: 'axios',
+    'react-dom': 'ReactDOM',
+    'react-router-dom': 'ReactRouterDOM'
   },
   plugins: [
     new DefinePlugin({ 'process.env.API_URL': JSON.stringify('http://localhost:5050/api') }),
