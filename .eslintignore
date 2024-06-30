@@ -6,3 +6,4 @@ dist
 *.scss
 cypress.config.ts
 *.json
+index.js
