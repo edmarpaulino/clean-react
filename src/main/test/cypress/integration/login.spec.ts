@@ -50,7 +50,7 @@ describe('Login', () => {
     FormHelper.testInputStatus('email', 'Campo inválido')
     cy.getByTestId('password')
       .focus()
-      .type(faker.word.sample({ length: 3 }))
+      .type(faker.word.sample({ length: { min: 1, max: 3 } }))
     FormHelper.testInputStatus('password', 'Campo inválido')
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')

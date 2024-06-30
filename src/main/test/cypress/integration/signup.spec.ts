@@ -32,7 +32,7 @@ const simulateValidSubmit = (): void => {
   cy.getByTestId('submit').click()
 }
 
-describe('Login', () => {
+describe('SignUp', () => {
   beforeEach(() => {
     cy.visit('signup')
   })
@@ -53,17 +53,17 @@ describe('Login', () => {
   it('Should present error state if form is invalid', () => {
     cy.getByTestId('name')
       .focus()
-      .type(faker.word.sample({ length: 2 }))
+      .type(faker.word.sample({ length: { min: 1, max: 2 } }))
     FormHelper.testInputStatus('name', 'Campo inválido')
     cy.getByTestId('email').focus().type(faker.word.sample())
     FormHelper.testInputStatus('email', 'Campo inválido')
     cy.getByTestId('password')
       .focus()
-      .type(faker.word.sample({ length: 3 }))
+      .type(faker.word.sample({ length: { min: 1, max: 3 } }))
     FormHelper.testInputStatus('password', 'Campo inválido')
     cy.getByTestId('passwordConfirmation')
       .focus()
-      .type(faker.word.sample({ length: 4 }))
+      .type(faker.word.sample({ length: { min: 1, max: 4 } }))
     FormHelper.testInputStatus('passwordConfirmation', 'Campo inválido')
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
