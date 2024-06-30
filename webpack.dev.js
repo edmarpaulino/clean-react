@@ -39,7 +39,8 @@ module.exports = merge(common, {
     static: {
       directory: './public'
     },
-    historyApiFallback: true
+    historyApiFallback: true,
+    port: 8080
   },
   plugins: [
     new DefinePlugin({ 'process.env.API_URL': JSON.stringify('http://localhost:5050/api') }),

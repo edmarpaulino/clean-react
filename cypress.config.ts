@@ -28,6 +28,7 @@ export default defineConfig({
     baseUrl: 'http://localhost:8080',
     fixturesFolder: './src/main/test/cypress/fixtures',
     supportFile: './src/main/test/cypress/support/index.ts',
-    specPattern: './src/main/test/cypress/**/*.spec.ts'
+    specPattern: './src/main/test/cypress/**/*.spec.ts',
+    video: false
   }
 })
