@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import Styles from './login-styles.scss'
 import { LoginHeader, Footer, Input, FormStatus, SubmitButton } from '@/presentation/components'
 import { ApiContext, FormContext } from '@/presentation/contexts'
@@ -23,6 +23,8 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     passwordError: null,
     mainError: null
   })
+
+  const contextValue = useMemo(() => ({ state, setState }), [state, setState])
 
   const validate = (field: 'email' | 'password'): void => {
     const { email, password } = state
@@ -60,7 +62,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   return (
     <div className={Styles.loginWrap}>
       <LoginHeader />
-      <FormContext.Provider value={{ state, setState }}>
+      <FormContext.Provider value={contextValue}>
         <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
