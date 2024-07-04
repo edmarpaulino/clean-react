@@ -1,11 +1,31 @@
 import React from 'react'
-import { screen, render } from '@testing-library/react'
+import { screen, render, fireEvent } from '@testing-library/react'
 import { SurveyItem } from '@/presentation/pages/survey-list/components'
 import { mockSurveyModel } from '@/domain/test'
 import { IconName } from '@/presentation/components'
+import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
+import { ApiContext } from '@/presentation/contexts'
 
-const makeSut = (survey = mockSurveyModel()): void => {
-  render(<SurveyItem survey={survey} />)
+type SutTypes = {
+  router: React.ComponentProps<typeof RouterProvider>['router']
+}
+
+const makeSut = (survey = mockSurveyModel()): SutTypes => {
+  const routes: RouteObject[] = [
+    {
+      path: '/',
+      element: <SurveyItem survey={survey} />
+    }
+  ]
+  const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
+  render(
+    <ApiContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
+      <RouterProvider router={router} />
+    </ApiContext.Provider>
+  )
+  return {
+    router
+  }
 }
 
 describe('Item Component', () => {
@@ -27,5 +47,12 @@ describe('Item Component', () => {
     expect(screen.getByTestId('day')).toHaveTextContent('07')
     expect(screen.getByTestId('month')).toHaveTextContent(/^dez$/)
     expect(screen.getByTestId('year')).toHaveTextContent('2023')
+  })
+
+  test('Should go to SurveyResult', () => {
+    const survey = mockSurveyModel()
+    const { router } = makeSut(survey)
+    fireEvent.click(screen.getByTestId('link'))
+    expect(router.state.location.pathname).toBe(`/surveys/${survey.id}`)
   })
 })
