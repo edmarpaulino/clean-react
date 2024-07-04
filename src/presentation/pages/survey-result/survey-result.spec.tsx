@@ -16,11 +16,11 @@ const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
   const setCurrentAccountMock = jest.fn()
   const routes: RouteObject[] = [
     {
-      path: '/surveys',
+      path: '/surveys/any_id',
       element: <SurveyResult loadSurveyResult={loadSurveyResultSpy} />
     }
   ]
-  const router = createMemoryRouter(routes, { initialEntries: ['/surveys'], initialIndex: 0 })
+  const router = createMemoryRouter(routes, { initialEntries: ['/', '/surveys/any_id'], initialIndex: 1 })
   render(
     <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }}>
       <RouterProvider router={router} />
@@ -103,5 +103,12 @@ describe('SurveyResult Component', () => {
     fireEvent.click(screen.getByTestId('reload'))
     expect(loadSurveyResultSpy.callsCount).toBe(1)
     await waitFor(() => screen.getByTestId('survey-result'))
+  })
+
+  test('Should go to SurveyList on back button click', async () => {
+    const { router } = makeSut()
+    await waitFor(() => screen.getByTestId('survey-result'))
+    fireEvent.click(screen.getByTestId('back-button'))
+    expect(router.state.location.pathname).toBe('/')
   })
 })
