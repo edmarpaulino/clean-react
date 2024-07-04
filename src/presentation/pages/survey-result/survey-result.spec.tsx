@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { SurveyResult } from '@/presentation/pages'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
@@ -93,5 +93,15 @@ describe('SurveyResult Component', () => {
     await waitFor(() => screen.getByTestId('survey-result'))
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
     expect(router.state.location.pathname).toBe('/login')
+  })
+
+  test('Should call LoadSurveyResult on reload', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new UnexpectedError())
+    makeSut(loadSurveyResultSpy)
+    await waitFor(() => screen.getByTestId('error'))
+    fireEvent.click(screen.getByTestId('reload'))
+    expect(loadSurveyResultSpy.callsCount).toBe(1)
+    await waitFor(() => screen.getByTestId('survey-result'))
   })
 })
