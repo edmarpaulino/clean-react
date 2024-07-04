@@ -13,11 +13,15 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
   const [state, setState] = useState({
     isLoading: false,
     error: '',
-    surveyResult: null as LoadSurveyResult.Model | null
+    surveyResult: null as LoadSurveyResult.Model | null,
+    reload: false
   })
   const handleError = useErrorHandler((error: Error) => {
     setState((prev) => ({ ...prev, surveyResult: null, error: error.message }))
   })
+  const reload = (): void => {
+    setState((prev: any) => ({ isLoading: false, error: '', surveyResult: null, reload: !prev.reload }))
+  }
 
   useEffect(() => {
     loadSurveyResult
@@ -26,7 +30,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
         setState((prev: any) => ({ ...prev, surveyResult }))
       })
       .catch(handleError)
-  }, [])
+  }, [state.reload])
 
   return (
     <div className={Styles.surveyResultWrap}>
@@ -59,7 +63,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
           </>
         )}
         {state.isLoading && <Loading />}
-        {state.error && <Error error={state.error} reload={() => undefined} />}
+        {state.error && <Error error={state.error} reload={reload} />}
       </div>
       <Footer />
     </div>
