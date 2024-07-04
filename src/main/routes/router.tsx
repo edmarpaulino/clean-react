@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { makeLogin, makeSignUp, makeSurveyList } from '@/main/factories/pages'
+import { makeLogin, makeSignUp, makeSurveyList, makeSurveyResult } from '@/main/factories/pages'
 import { ApiContext } from '@/presentation/contexts'
 import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adpters/current-account-adapter'
-import { SurveyResult } from '@/presentation/pages'
-import { PrivateRoute } from '@/presentation/components'
 
 const Router: React.FC = () => {
   const value = useMemo(
@@ -29,12 +27,8 @@ const Router: React.FC = () => {
       Component: makeSurveyList
     },
     {
-      path: '/surveys',
-      element: (
-        <PrivateRoute>
-          <SurveyResult />
-        </PrivateRoute>
-      )
+      path: '/surveys/:id',
+      Component: makeSurveyResult
     }
   ])
 
