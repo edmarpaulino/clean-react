@@ -4,12 +4,14 @@ import Styles from './survey-result-styles.scss'
 import { Calendar, Error, Footer, Header, Loading } from '@/presentation/components'
 import type { LoadSurveyResult } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
+  const navigate = useNavigate()
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -59,7 +61,14 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
                 </li>
               ))}
             </FlipMove>
-            <button>Voltar</button>
+            <button
+              data-testid="back-button"
+              onClick={() => {
+                navigate(-1)
+              }}
+            >
+              Voltar
+            </button>
           </>
         )}
         {state.isLoading && <Loading />}
