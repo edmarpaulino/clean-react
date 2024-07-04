@@ -4,14 +4,13 @@ import { SurveyResult } from '@/presentation/pages'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
 import { ApiContext } from '@/presentation/contexts'
 import { LoadSurveyResultSpy, mockSurveyResultModel } from '@/domain/test'
+import { UnexpectedError } from '@/domain/errors'
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
 }
 
-const makeSut = (surveyResult = mockSurveyResultModel()): SutTypes => {
-  const loadSurveyResultSpy = new LoadSurveyResultSpy()
-  loadSurveyResultSpy.surveyResult = surveyResult
+const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
   const routes: RouteObject[] = [
     {
       path: '/surveys',
@@ -47,7 +46,9 @@ describe('SurveyResult Component', () => {
 
   test('Should present SurveyResult data on success', async () => {
     const surveyResult = { ...mockSurveyResultModel(), date: new Date('2024-06-23T00:00:00') }
-    makeSut(surveyResult)
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    loadSurveyResultSpy.surveyResult = surveyResult
+    makeSut(loadSurveyResultSpy)
     await waitFor(() => screen.getByTestId('survey-result'))
     expect(screen.getByTestId('day')).toHaveTextContent('23')
     expect(screen.getByTestId('month')).toHaveTextContent(/^jun$/)
@@ -67,5 +68,16 @@ describe('SurveyResult Component', () => {
     const percents = screen.queryAllByTestId('percent')
     expect(percents[0]).toHaveTextContent(`${surveyResult.answers[0].percent}%`)
     expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
+  })
+
+  test('Should render error on UnexpectedError', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    const error = new UnexpectedError()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error)
+    makeSut(loadSurveyResultSpy)
+    await waitFor(() => screen.getByTestId('error'))
+    expect(screen.queryByTestId('question')).not.toBeInTheDocument()
+    expect(screen.getByTestId('error')).toHaveTextContent(error.message)
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
   })
 })
