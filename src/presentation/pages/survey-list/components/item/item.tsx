@@ -19,13 +19,15 @@ const SurveyItem: React.FC<Props> = ({ survey }) => {
         <Calendar date={survey.date} className={Styles.calendarWrap} />
         <p data-testid="question">{survey.question}</p>
       </div>
-      <footer
-        data-testid="link"
-        onClick={() => {
-          navigate(`/surveys/${survey.id}`)
-        }}
-      >
-        Ver Resultado
+      <footer>
+        <a
+          data-testid="link"
+          onClick={() => {
+            navigate(`/surveys/${survey.id}`)
+          }}
+        >
+          Ver Resultado
+        </a>
       </footer>
     </li>
   )
