@@ -4,13 +4,16 @@ import { SurveyResult } from '@/presentation/pages'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
 import { ApiContext } from '@/presentation/contexts'
 import { LoadSurveyResultSpy, mockSurveyResultModel } from '@/domain/test'
-import { UnexpectedError } from '@/domain/errors'
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 
 type SutTypes = {
+  router: React.ComponentProps<typeof RouterProvider>['router']
   loadSurveyResultSpy: LoadSurveyResultSpy
+  setCurrentAccountMock: typeof jest.fn
 }
 
 const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
+  const setCurrentAccountMock = jest.fn()
   const routes: RouteObject[] = [
     {
       path: '/surveys',
@@ -19,12 +22,14 @@ const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/surveys'], initialIndex: 0 })
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
+    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }}>
       <RouterProvider router={router} />
     </ApiContext.Provider>
   )
   return {
-    loadSurveyResultSpy
+    router,
+    loadSurveyResultSpy,
+    setCurrentAccountMock
   }
 }
 
@@ -79,5 +84,14 @@ describe('SurveyResult Component', () => {
     expect(screen.queryByTestId('question')).not.toBeInTheDocument()
     expect(screen.getByTestId('error')).toHaveTextContent(error.message)
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+  })
+
+  test('Should logout on AccessDeniedError', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new AccessDeniedError())
+    const { router, setCurrentAccountMock } = makeSut(loadSurveyResultSpy)
+    await waitFor(() => screen.getByTestId('survey-result'))
+    expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
+    expect(router.state.location.pathname).toBe('/login')
   })
 })
