@@ -1,15 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FlipMove from 'react-flip-move'
 import Styles from './survey-result-styles.scss'
 import { Calendar, Error, Footer, Header, Loading } from '@/presentation/components'
 import type { LoadSurveyResult } from '@/domain/usecases'
 
-const SurveyResult: React.FC = () => {
+type Props = {
+  loadSurveyResult: LoadSurveyResult
+}
+
+const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
   const [state] = useState({
     isLoading: false,
     error: '',
     surveyResult: null as LoadSurveyResult.Model | null
   })
+
+  useEffect(() => {
+    loadSurveyResult.load().then().catch()
+  }, [])
 
   return (
     <div className={Styles.surveyResultWrap}>
