@@ -7,6 +7,10 @@ const mockUnexpectedError = (): void => {
   Http.mockServerError(PATH, 'GET')
 }
 
+const mockAccessDeniedError = (): void => {
+  Http.mockForbiddenError(PATH, 'GET')
+}
+
 const mockSuccess = (): void => {
   cy.fixture('survey-result').then((surveyResult) => {
     Http.mockOk(PATH, 'GET', surveyResult)
@@ -33,5 +37,11 @@ describe('SurveyResult', () => {
     mockSuccess()
     cy.getByTestId('reload').click()
     cy.getByTestId('question').should('exist')
+  })
+
+  it('Should logout on AccessDeniedError', () => {
+    mockAccessDeniedError()
+    cy.visit('/surveys/any_id')
+    Helper.testUrl('/login')
   })
 })
