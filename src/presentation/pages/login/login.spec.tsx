@@ -8,6 +8,7 @@ import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-rout
 import ApiContext from '@/presentation/contexts/api/api-context'
 import type { Authentication } from '@/domain/usecases'
 import { AuthenticationSpy } from '@/domain/test'
+import { RecoilRoot } from 'recoil'
 
 type SutParams = {
   validationError: string
@@ -33,9 +34,11 @@ const makeSut = (params?: SutParams): SutTypes => {
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/login'], initialIndex: 0 })
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-      <RouterProvider router={router} />
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+        <RouterProvider router={router} />
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
   return {
     validationStub,

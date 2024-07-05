@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { makeLogin, makeSignUp, makeSurveyList, makeSurveyResult } from '@/main/factories/pages'
 import { ApiContext } from '@/presentation/contexts'
 import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adpters/current-account-adapter'
+import { RecoilRoot } from 'recoil'
 
 const Router: React.FC = () => {
   const value = useMemo(
@@ -33,9 +34,11 @@ const Router: React.FC = () => {
   ])
 
   return (
-    <ApiContext.Provider value={value}>
-      <RouterProvider router={router} />
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={value}>
+        <RouterProvider router={router} />
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
 }
 
