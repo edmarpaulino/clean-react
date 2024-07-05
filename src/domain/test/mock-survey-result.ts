@@ -1,7 +1,12 @@
 import { faker } from '@faker-js/faker'
-import type { LoadSurveyResult } from '@/domain/usecases'
+import type { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
+import type { SurveyResultModel } from '@/domain/models'
 
-export const mockSurveyResultModel = (): LoadSurveyResult.Model => ({
+export const mockSaveSurveyResultParams = (): SaveSurveyResult.Params => ({
+  answer: faker.word.words(10)
+})
+
+export const mockSurveyResultModel = (): SurveyResultModel => ({
   question: faker.word.words(10),
   date: faker.date.recent(),
   answers: [
