@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Styles from './survey-list-styles.scss'
+import * as Styles from './survey-list-styles.scss'
 import { Error, Footer, Header } from '@/presentation/components'
 import { SurveyListItem } from '@/presentation/pages/survey-list/components'
 import type { LoadSurveyList } from '@/domain/usecases/load-survey-list'

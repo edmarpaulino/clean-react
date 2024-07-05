@@ -1,5 +1,5 @@
 import React from 'react'
-import Styles from './calendar-styles.scss'
+import * as Styles from './calendar-styles.scss'
 
 type Props = {
   date: Date

@@ -1,5 +1,5 @@
 import React from 'react'
-import Styles from './item-styles.scss'
+import * as Styles from './item-styles.scss'
 import { Calendar, Icon, IconName } from '@/presentation/components'
 import type { LoadSurveyList } from '@/domain/usecases'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +13,7 @@ const SurveyItem: React.FC<Props> = ({ survey }) => {
   const navigate = useNavigate()
 
   return (
-    <li className={Styles.surveyItemWrap}>
+    <li data-testid="survey-item-wrap" className={Styles.surveyItemWrap}>
       <div className={Styles.surveyContent}>
         <Icon className={Styles.iconWrap} iconName={iconName} />
         <Calendar date={survey.date} className={Styles.calendarWrap} />

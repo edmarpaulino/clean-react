@@ -1,5 +1,5 @@
 import React, { memo, useContext } from 'react'
-import Styles from './header-styles.scss'
+import * as Styles from './header-styles.scss'
 import { Logo } from '@/presentation/components'
 import { ApiContext } from '@/presentation/contexts'
 import { useLogout } from '@/presentation/hooks'

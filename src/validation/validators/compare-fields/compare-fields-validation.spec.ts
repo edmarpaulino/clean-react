@@ -12,8 +12,8 @@ describe('CompareFieldValidation', () => {
     const fieldToCompare = faker.database.column()
     const sut = makeSut(field, fieldToCompare)
     const error = sut.validate({
-      [field]: faker.word.sample({ length: { min: 1, max: 3 } }),
-      [fieldToCompare]: faker.word.sample({ length: { min: 6, max: 9 } })
+      [field]: faker.word.adjective(),
+      [fieldToCompare]: faker.word.adverb()
     })
     expect(error).toEqual(new InvalidFieldError())
   })

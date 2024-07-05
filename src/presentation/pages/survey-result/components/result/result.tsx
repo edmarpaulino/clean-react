@@ -1,5 +1,5 @@
 import React from 'react'
-import Styles from './result-styles.scss'
+import * as Styles from './result-styles.scss'
 import { Calendar } from '@/presentation/components'
 import { useNavigate } from 'react-router-dom'
 import type { LoadSurveyResult } from '@/domain/usecases'

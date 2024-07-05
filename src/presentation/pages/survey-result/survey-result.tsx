@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Styles from './survey-result-styles.scss'
+import * as Styles from './survey-result-styles.scss'
 import { Error, Footer, Header, Loading } from '@/presentation/components'
 import type { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
