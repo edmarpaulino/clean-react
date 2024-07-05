@@ -2,10 +2,10 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { SurveyResult } from '@/presentation/pages'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
-import { ApiContext } from '@/presentation/contexts'
 import { LoadSurveyResultSpy, mockSurveyResultModel, SaveSurveyResultSpy } from '@/domain/test'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { RecoilRoot } from 'recoil'
+import { currentAccountState } from '@/presentation/components'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
@@ -31,11 +31,14 @@ const makeSut = ({
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/', '/surveys/any_id'], initialIndex: 1 })
+  const mockedState = { setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }
   render(
-    <RecoilRoot>
-      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }}>
-        <RouterProvider router={router} />
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(currentAccountState, mockedState)
+      }}
+    >
+      <RouterProvider router={router} />
     </RecoilRoot>
   )
   return {

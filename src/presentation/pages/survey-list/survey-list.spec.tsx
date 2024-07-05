@@ -4,8 +4,8 @@ import { SurveyList } from '@/presentation/pages'
 import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
-import { ApiContext } from '@/presentation/contexts'
 import { RecoilRoot } from 'recoil'
+import { currentAccountState } from '@/presentation/components'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
@@ -22,13 +22,17 @@ const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: () => mockAccountModel()
+  }
   render(
-    <RecoilRoot>
-      <ApiContext.Provider
-        value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }}
-      >
-        <RouterProvider router={router} />
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(currentAccountState, mockedState)
+      }}
+    >
+      <RouterProvider router={router} />
     </RecoilRoot>
   )
   return {

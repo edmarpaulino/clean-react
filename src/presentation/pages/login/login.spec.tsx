@@ -5,10 +5,10 @@ import { ValidationStub, FormHelper } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom'
-import ApiContext from '@/presentation/contexts/api/api-context'
 import type { Authentication } from '@/domain/usecases'
 import { AuthenticationSpy } from '@/domain/test'
 import { RecoilRoot } from 'recoil'
+import { currentAccountState } from '@/presentation/components'
 
 type SutParams = {
   validationError: string
@@ -33,11 +33,17 @@ const makeSut = (params?: SutParams): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/login'], initialIndex: 0 })
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: jest.fn()
+  }
   render(
-    <RecoilRoot>
-      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-        <RouterProvider router={router} />
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(currentAccountState, mockedState)
+      }}
+    >
+      <RouterProvider router={router} />
     </RecoilRoot>
   )
   return {

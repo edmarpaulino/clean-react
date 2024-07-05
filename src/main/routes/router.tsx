@@ -1,43 +1,42 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { makeLogin, makeSignUp, makeSurveyList, makeSurveyResult } from '@/main/factories/pages'
-import { ApiContext } from '@/presentation/contexts'
 import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adpters/current-account-adapter'
 import { RecoilRoot } from 'recoil'
+import { currentAccountState } from '@/presentation/components'
+
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    Component: makeLogin
+  },
+  {
+    path: '/signup',
+    Component: makeSignUp
+  },
+  {
+    path: '/',
+    Component: makeSurveyList
+  },
+  {
+    path: '/surveys/:id',
+    Component: makeSurveyResult
+  }
+])
 
 const Router: React.FC = () => {
-  const value = useMemo(
-    () => ({
-      setCurrentAccount: setCurrentAccountAdapter,
-      getCurrentAccount: getCurrentAccountAdapter
-    }),
-    [setCurrentAccountAdapter, getCurrentAccountAdapter]
-  )
-
-  const router = createBrowserRouter([
-    {
-      path: '/login',
-      Component: makeLogin
-    },
-    {
-      path: '/signup',
-      Component: makeSignUp
-    },
-    {
-      path: '/',
-      Component: makeSurveyList
-    },
-    {
-      path: '/surveys/:id',
-      Component: makeSurveyResult
-    }
-  ])
+  const state = {
+    setCurrentAccount: setCurrentAccountAdapter,
+    getCurrentAccount: getCurrentAccountAdapter
+  }
 
   return (
-    <RecoilRoot>
-      <ApiContext.Provider value={value}>
-        <RouterProvider router={router} />
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={(snapshot) => {
+        snapshot.set(currentAccountState, state)
+      }}
+    >
+      <RouterProvider router={router} />
     </RecoilRoot>
   )
 }

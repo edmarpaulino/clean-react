@@ -2,9 +2,9 @@ import React from 'react'
 import { screen, render, fireEvent } from '@testing-library/react'
 import { SurveyItem } from '@/presentation/pages/survey-list/components'
 import { mockSurveyModel } from '@/domain/test'
-import { IconName } from '@/presentation/components'
+import { currentAccountState, IconName } from '@/presentation/components'
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
-import { ApiContext } from '@/presentation/contexts'
+import { RecoilRoot } from 'recoil'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
@@ -18,10 +18,15 @@ const makeSut = (survey = mockSurveyModel()): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
+  const mockedState = { setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(currentAccountState, mockedState)
+      }}
+    >
       <RouterProvider router={router} />
-    </ApiContext.Provider>
+    </RecoilRoot>
   )
   return {
     router
