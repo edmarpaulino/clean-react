@@ -1,55 +1,29 @@
 import { faker } from '@faker-js/faker'
-import {
-  HttpStatusCode,
-  type HttpGetClient,
-  type HttpGetParams,
-  type HttpPostClient,
-  type HttpPostParams,
-  type HttpResponse
-} from '@/data/protocols/http'
+import { HttpStatusCode } from '@/data/protocols/http'
+import type { HttpRequest, HttpResponse, HttpMethod, HttpClient } from '@/data/protocols/http'
 
-export const mockPostRequest = (): HttpPostParams => ({
+export const mockHttpRequest = (): HttpRequest => ({
   url: faker.internet.url(),
-  body: faker.internet.exampleEmail()
+  method: faker.helpers.arrayElement<HttpMethod>(['get', 'post', 'put', 'delete']),
+  headers: faker.helpers.objectEntry({ anyHeaderProp: 'any_header_value', otherHeaderProp: 'other_header_value' }),
+  body: faker.helpers.objectEntry({ anyBodyProp: 'any_body_value', otherBodyProp: 'other_body_value' })
 })
 
-export const mockGetRequest = (): HttpGetParams => ({
-  url: faker.internet.url(),
-  headers: [faker.word.sample()]
-})
-
-export class HttpPostClientSpy<R = any> implements HttpPostClient<R> {
-  private readonly defaultResponse: HttpResponse<R> = {
-    statusCode: HttpStatusCode.ok
-  }
-
+export class HttpClientSpy<R = any> implements HttpClient<R> {
   public url?: string
+  public method?: HttpMethod
+  public headers?: any
   public body?: any
-  public response: HttpResponse<R> = this.defaultResponse
-
-  async post(params: HttpPostParams): Promise<HttpResponse<R>> {
-    this.url = params.url
-    this.body = params.body
-    return this.response
-  }
-
-  reset(): void {
-    this.response = this.defaultResponse
-  }
-}
-
-export class HttpGetClientSpy<R = any> implements HttpGetClient<R> {
-  private readonly defaultResponse: HttpResponse<R> = {
+  public response: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok
   }
 
-  public url: string = ''
-  public headers?: any
-  public response: HttpResponse<R> = this.defaultResponse
+  async request(data: HttpRequest): Promise<HttpResponse<R>> {
+    this.url = data.url
+    this.method = data.method
+    this.headers = data.headers
+    this.body = data.body
 
-  async get(params: HttpGetParams): Promise<HttpResponse<R>> {
-    this.url = params.url
-    this.headers = params.headers
     return this.response
   }
 }
