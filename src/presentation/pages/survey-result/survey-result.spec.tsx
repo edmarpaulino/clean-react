@@ -5,6 +5,7 @@ import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-rout
 import { ApiContext } from '@/presentation/contexts'
 import { LoadSurveyResultSpy, mockSurveyResultModel, SaveSurveyResultSpy } from '@/domain/test'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
+import { RecoilRoot } from 'recoil'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
@@ -31,9 +32,11 @@ const makeSut = ({
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/', '/surveys/any_id'], initialIndex: 1 })
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }}>
-      <RouterProvider router={router} />
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }}>
+        <RouterProvider router={router} />
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
   return {
     router,
