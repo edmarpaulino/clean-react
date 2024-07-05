@@ -26,7 +26,13 @@ const Input: React.FC<Props> = (props: Props) => {
           setState((prev: any) => ({ ...prev, [e.target.name]: e.target.value }))
         }}
       />
-      <label data-testid={`${props.name}-label`} onClick={() => inputRef.current?.focus()} title={error}>
+      <label
+        data-testid={`${props.name}-label`}
+        onClick={() => {
+          inputRef.current!.focus()
+        }}
+        title={error}
+      >
         {props.placeholder}
       </label>
     </div>
