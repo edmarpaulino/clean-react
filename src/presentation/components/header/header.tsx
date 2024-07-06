@@ -18,7 +18,7 @@ const Header: React.FC = () => {
       <div className={Styles.headerContent}>
         <Logo />
         <div className={Styles.logoutWrap}>
-          <span data-testid="username">{getCurrentAccount()?.name}</span>
+          <span data-testid="username">{getCurrentAccount()!.name}</span>
           <a data-testid="logout" href="#" onClick={handleLogout}>
             Sair
           </a>
