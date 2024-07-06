@@ -4,7 +4,7 @@ import { LoginHeader, Footer, currentAccountState } from '@/presentation/compone
 import type { Validation } from '@/presentation/protocols/validation'
 import type { Authentication } from '@/domain/usecases'
 import { Link, useNavigate } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import { loginState, Input, SubmitButton, FormStatus } from '@/presentation/pages/login/components'
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+  const resetLoginState = useResetRecoilState(loginState)
   const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const navigate = useNavigate()
   const [state, setState] = useRecoilState(loginState)
@@ -23,6 +24,10 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     setState((prev: any) => ({ ...prev, [`${field}Error`]: validation.validate(field, formData) }))
     setState((prev: any) => ({ ...prev, isFormInvalid: !!prev.emailError || !!prev.passwordError }))
   }
+
+  useEffect(() => {
+    resetLoginState()
+  }, [])
 
   useEffect(() => {
     validate('email')

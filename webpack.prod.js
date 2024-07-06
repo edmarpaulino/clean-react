@@ -36,8 +36,9 @@ module.exports = merge(common, {
   externals: {
     react: 'React',
     axios: 'axios',
-    'react-dom': 'ReactDOM',
-    'react-router-dom': 'ReactRouterDOM'
+    recoil: 'Recoil',
+    'react-dom': 'ReactDOM'
+    // 'react-router-dom': 'ReactRouterDOM'
   },
   plugins: [
     new DefinePlugin({ 'process.env.API_URL': JSON.stringify('http://localhost:5050/api') }),
