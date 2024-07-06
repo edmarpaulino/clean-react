@@ -1,10 +1,7 @@
 import React from 'react'
-import { render } from '@testing-library/react'
-import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom'
+import { type RouteObject, type RouterProvider, createMemoryRouter } from 'react-router-dom'
 import PrivateRoute from './private-route'
-import { mockAccountModel } from '@/domain/test'
-import { RecoilRoot } from 'recoil'
-import { currentAccountState } from '@/presentation/components'
+import { renderWithRouter } from '@/presentation/test/render-helper'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
@@ -18,19 +15,7 @@ const makeSut = (returnAccount = true): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
-  const mockedState = {
-    setCurrentAccount: jest.fn(),
-    getCurrentAccount: () => (returnAccount ? mockAccountModel() : undefined)
-  }
-  render(
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(currentAccountState, mockedState)
-      }}
-    >
-      <RouterProvider router={router} />
-    </RecoilRoot>
-  )
+  renderWithRouter({ router, returnAccount })
   return {
     router
   }

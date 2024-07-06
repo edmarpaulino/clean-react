@@ -1,17 +1,17 @@
 import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
-import { currentAccountState, Header } from '@/presentation/components'
-import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
+import { fireEvent, screen } from '@testing-library/react'
+import { Header } from '@/presentation/components'
+import { createMemoryRouter, type RouteObject, type RouterProvider } from 'react-router-dom'
 import { mockAccountModel } from '@/domain/test'
-import { RecoilRoot } from 'recoil'
+import { renderWithRouter } from '@/presentation/test/render-helper'
+import type { AccountModel } from '@/domain/models'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
-  setCurrentAccountMock: typeof jest.fn
+  setCurrentAccountMock: (account: AccountModel | null | undefined) => void
 }
 
 const makeSut = (account = mockAccountModel()): SutTypes => {
-  const setCurrentAccountMock = jest.fn()
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -19,19 +19,7 @@ const makeSut = (account = mockAccountModel()): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
-  const mockedState = {
-    setCurrentAccount: setCurrentAccountMock,
-    getCurrentAccount: () => account
-  }
-  render(
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(currentAccountState, mockedState)
-      }}
-    >
-      <RouterProvider router={router} />
-    </RecoilRoot>
-  )
+  const { setCurrentAccountMock } = renderWithRouter({ router, account })
   return {
     router,
     setCurrentAccountMock

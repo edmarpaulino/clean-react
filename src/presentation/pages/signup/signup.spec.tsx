@@ -1,14 +1,14 @@
 import React from 'react'
-import { screen, render, fireEvent, waitFor } from '@testing-library/react'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
 import SignUp from './signup'
 import { FormHelper, ValidationStub } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
 import { EmailInUseError } from '@/domain/errors'
-import { type RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom'
+import { type RouteObject, type RouterProvider, createMemoryRouter } from 'react-router-dom'
 import type { AddAccount } from '@/domain/usecases'
 import { AddAccountSpy } from '@/domain/test'
-import { RecoilRoot } from 'recoil'
-import { currentAccountState } from '@/presentation/components'
+
+import { renderWithRouter } from '@/presentation/test/render-helper'
 
 type SutParams = {
   validationError: string
@@ -25,7 +25,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError ?? null
   const addAccountSpy = new AddAccountSpy()
-  const setCurrentAccountMock = jest.fn()
   const routes: RouteObject[] = [
     {
       path: '/signup',
@@ -33,19 +32,8 @@ const makeSut = (params?: SutParams): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/signup'], initialIndex: 0 })
-  const mockedState = {
-    setCurrentAccount: setCurrentAccountMock,
-    getCurrentAccount: jest.fn()
-  }
-  render(
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(currentAccountState, mockedState)
-      }}
-    >
-      <RouterProvider router={router} />
-    </RecoilRoot>
-  )
+
+  const { setCurrentAccountMock } = renderWithRouter({ router })
   return {
     validationStub,
     addAccountSpy,

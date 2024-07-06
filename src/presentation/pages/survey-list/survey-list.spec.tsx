@@ -1,20 +1,19 @@
 import React from 'react'
-import { screen, render, waitFor, fireEvent } from '@testing-library/react'
+import { screen, waitFor, fireEvent } from '@testing-library/react'
 import { SurveyList } from '@/presentation/pages'
-import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
+import { LoadSurveyListSpy } from '@/domain/test'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
-import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
-import { RecoilRoot } from 'recoil'
-import { currentAccountState } from '@/presentation/components'
+import { createMemoryRouter, type RouteObject, type RouterProvider } from 'react-router-dom'
+import { renderWithRouter } from '@/presentation/test/render-helper'
+import type { AccountModel } from '@/domain/models'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
   loadSurveyListSpy: LoadSurveyListSpy
-  setCurrentAccountMock: typeof jest.fn
+  setCurrentAccountMock: (account: AccountModel | null | undefined) => void
 }
 
 const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
-  const setCurrentAccountMock = jest.fn()
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -22,19 +21,8 @@ const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
-  const mockedState = {
-    setCurrentAccount: setCurrentAccountMock,
-    getCurrentAccount: () => mockAccountModel()
-  }
-  render(
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(currentAccountState, mockedState)
-      }}
-    >
-      <RouterProvider router={router} />
-    </RecoilRoot>
-  )
+
+  const { setCurrentAccountMock } = renderWithRouter({ router })
   return {
     router,
     loadSurveyListSpy,

@@ -1,10 +1,10 @@
 import React from 'react'
-import { screen, render, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 import { SurveyItem } from '@/presentation/pages/survey-list/components'
 import { mockSurveyModel } from '@/domain/test'
-import { currentAccountState, IconName } from '@/presentation/components'
-import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router-dom'
-import { RecoilRoot } from 'recoil'
+import { IconName } from '@/presentation/components'
+import { createMemoryRouter, type RouteObject, type RouterProvider } from 'react-router-dom'
+import { renderWithRouter } from '@/presentation/test/render-helper'
 
 type SutTypes = {
   router: React.ComponentProps<typeof RouterProvider>['router']
@@ -18,16 +18,7 @@ const makeSut = (survey = mockSurveyModel()): SutTypes => {
     }
   ]
   const router = createMemoryRouter(routes, { initialEntries: ['/'], initialIndex: 0 })
-  const mockedState = { setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }
-  render(
-    <RecoilRoot
-      initializeState={({ set }) => {
-        set(currentAccountState, mockedState)
-      }}
-    >
-      <RouterProvider router={router} />
-    </RecoilRoot>
-  )
+  renderWithRouter({ router })
   return {
     router
   }
