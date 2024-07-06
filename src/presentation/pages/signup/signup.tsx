@@ -5,7 +5,7 @@ import type { Validation } from '@/presentation/protocols/validation'
 import type { AddAccount } from '@/domain/usecases'
 import { useNavigate, Link } from 'react-router-dom'
 import { FormStatus, Input, signUpState, SubmitButton } from '@/presentation/pages/signup/components'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
 type Props = {
   validation: Validation
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
+  const resetSignUpState = useResetRecoilState(signUpState)
   const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const navigate = useNavigate()
   const [state, setState] = useRecoilState(signUpState)
@@ -26,6 +27,10 @@ const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
       isFormInvalid: !!prev.nameError || !!prev.emailError || !!prev.passwordError || !!prev.passwordConfirmationError
     }))
   }
+
+  useEffect(() => {
+    resetSignUpState()
+  }, [])
 
   useEffect(() => {
     validate('name')
